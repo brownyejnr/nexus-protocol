@@ -1,0 +1,2521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus Protocol — Bitcoin L1 DeFi Super-App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════════
+   NEXUS PROTOCOL — Design System
+═══════════════════════════════════════════════════ */
+:root {
+  --bg-void:       #060d1a;
+  --bg-deep:       #0B1120;
+  --bg-mid:        #0d1b30;
+  --bg-card:       #112240;
+  --bg-card-hover: #162a50;
+  --bg-glass:      rgba(17, 34, 64, 0.7);
+  --bg-input:      rgba(11, 17, 32, 0.8);
+
+  --accent-neon:   #38BDF8;
+  --accent-cyan:   #64FFDA;
+  --accent-purple: #818CF8;
+  --accent-gold:   #F59E0B;
+  --accent-red:    #F87171;
+  --accent-green:  #34D399;
+
+  --text-primary:  #E2E8F0;
+  --text-secondary:#8892A4;
+  --text-muted:    #4A5568;
+
+  --border:        rgba(56, 189, 248, 0.12);
+  --border-hover:  rgba(56, 189, 248, 0.35);
+  --glow-sm:       0 0 12px rgba(56, 189, 248, 0.25);
+  --glow-md:       0 0 24px rgba(56, 189, 248, 0.35);
+  --glow-lg:       0 0 48px rgba(56, 189, 248, 0.2);
+
+  --font-display:  'Syne', sans-serif;
+  --font-body:     'Space Grotesk', sans-serif;
+  --font-mono:     'JetBrains Mono', monospace;
+
+  --radius-sm:     6px;
+  --radius-md:     12px;
+  --radius-lg:     18px;
+  --radius-xl:     24px;
+
+  --transition:    0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Cosmic background grid */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(56, 189, 248, 0.06) 0%, transparent 60%),
+    linear-gradient(rgba(56, 189, 248, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
+  background-size: 100% 100%, 48px 48px, 48px 48px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Floating orbs */
+body::after {
+  content: '';
+  position: fixed;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.04) 0%, transparent 70%);
+  top: -200px; right: -200px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  animation: drift 20s ease-in-out infinite alternate;
+}
+
+@keyframes drift {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-80px, 100px) scale(1.15); }
+}
+
+/* ─── Typography ─── */
+h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); }
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-void); }
+::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 3px; }
+
+/* ════════════════════════════════════════
+   NAV
+════════════════════════════════════════ */
+.nav {
+  position: sticky; top: 0; z-index: 1000;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px;
+  height: 68px;
+  background: rgba(6, 13, 26, 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 4px 40px rgba(0,0,0,0.4);
+}
+
+.nav-brand {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.nav-brand .logo-icon {
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, var(--accent-neon), var(--accent-cyan));
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  box-shadow: var(--glow-sm);
+  flex-shrink: 0;
+}
+
+.nav-brand .logo-text span { color: var(--accent-neon); }
+
+.nav-tabs {
+  display: flex; gap: 4px;
+  background: rgba(17, 34, 64, 0.6);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 4px;
+}
+
+.nav-tab {
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+  border: none; background: none;
+  font-family: var(--font-body);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.nav-tab:hover { color: var(--text-primary); background: rgba(56, 189, 248, 0.08); }
+
+.nav-tab.active {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(100, 255, 218, 0.1));
+  color: var(--accent-neon);
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.15);
+}
+
+.nav-right { display: flex; gap: 12px; align-items: center; }
+
+.btn-wallet {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 22px;
+  background: linear-gradient(135deg, var(--accent-neon), var(--accent-cyan));
+  border: none; border-radius: 10px;
+  font-family: var(--font-body);
+  font-size: 0.88rem; font-weight: 700;
+  color: var(--bg-deep);
+  cursor: pointer;
+  transition: var(--transition);
+  letter-spacing: 0.02em;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+  white-space: nowrap;
+}
+
+.btn-wallet:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 28px rgba(56, 189, 248, 0.5);
+}
+
+.btn-wallet.connected {
+  background: rgba(52, 211, 153, 0.15);
+  color: var(--accent-green);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  box-shadow: 0 0 16px rgba(52, 211, 153, 0.15);
+}
+
+.wallet-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  box-shadow: 0 0 6px var(--accent-green);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.8); }
+}
+
+/* ════════════════════════════════════════
+   MAIN LAYOUT
+════════════════════════════════════════ */
+.main { position: relative; z-index: 1; }
+
+.page { display: none; animation: pageFade 0.3s ease; }
+.page.active { display: block; }
+
+@keyframes pageFade {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+/* ════════════════════════════════════════
+   HERO BANNER (shown before connecting)
+════════════════════════════════════════ */
+.hero {
+  text-align: center;
+  padding: 64px 24px 48px;
+  position: relative;
+}
+
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 16px;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent-neon);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.hero h1 {
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #fff 30%, var(--accent-neon) 70%, var(--accent-cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 560px;
+  margin: 0 auto 36px;
+  line-height: 1.65;
+}
+
+.hero-stats {
+  display: flex; justify-content: center; gap: 40px;
+  margin-top: 48px;
+  flex-wrap: wrap;
+}
+
+.stat-item { text-align: center; }
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--accent-neon);
+  display: block;
+}
+.stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* ════════════════════════════════════════
+   SECTION HEADERS
+════════════════════════════════════════ */
+.section-header {
+  padding: 36px 0 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.section-title {
+  font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em;
+}
+
+.section-title span { color: var(--accent-neon); }
+
+.section-subtitle { font-size: 0.9rem; color: var(--text-secondary); margin-top: 4px; }
+
+/* ════════════════════════════════════════
+   CARDS & GLASS
+════════════════════════════════════════ */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.03) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4), var(--glow-sm);
+}
+
+.card-glass {
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+/* ════════════════════════════════════════
+   BUTTONS
+════════════════════════════════════════ */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 0.9rem; font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-neon), #0ea5e9);
+  color: var(--bg-deep);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 28px rgba(56, 189, 248, 0.45);
+}
+
+.btn-secondary {
+  background: rgba(56, 189, 248, 0.1);
+  color: var(--accent-neon);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+}
+.btn-secondary:hover {
+  background: rgba(56, 189, 248, 0.18);
+  border-color: var(--accent-neon);
+  transform: translateY(-1px);
+  box-shadow: var(--glow-sm);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green));
+  color: var(--bg-deep);
+}
+.btn-success:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(100, 255, 218, 0.35); }
+
+.btn-danger {
+  background: rgba(248, 113, 113, 0.12);
+  color: var(--accent-red);
+  border: 1px solid rgba(248, 113, 113, 0.25);
+}
+.btn-danger:hover { background: rgba(248, 113, 113, 0.22); }
+
+.btn-lg { padding: 14px 32px; font-size: 1rem; }
+.btn-sm { padding: 8px 16px; font-size: 0.82rem; }
+.btn-full { width: 100%; }
+
+.btn-outline {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+.btn-outline:hover { border-color: var(--border-hover); color: var(--text-primary); }
+
+/* ════════════════════════════════════════
+   BADGES & TAGS
+════════════════════════════════════════ */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.badge-blue   { background: rgba(56,189,248,0.12); color: var(--accent-neon); border: 1px solid rgba(56,189,248,0.2); }
+.badge-green  { background: rgba(52,211,153,0.12); color: var(--accent-green); border: 1px solid rgba(52,211,153,0.2); }
+.badge-gold   { background: rgba(245,158,11,0.12);  color: var(--accent-gold); border: 1px solid rgba(245,158,11,0.2); }
+.badge-purple { background: rgba(129,140,248,0.12); color: var(--accent-purple); border: 1px solid rgba(129,140,248,0.2); }
+.badge-red    { background: rgba(248,113,113,0.12); color: var(--accent-red); border: 1px solid rgba(248,113,113,0.2); }
+
+/* ════════════════════════════════════════
+   INPUTS
+════════════════════════════════════════ */
+.input {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  transition: var(--transition);
+  outline: none;
+}
+
+.input:focus {
+  border-color: var(--accent-neon);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.12);
+}
+
+.input::placeholder { color: var(--text-muted); }
+
+.select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238892A4' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+.input-group { position: relative; }
+.input-prefix {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  font-size: 0.85rem; color: var(--text-muted); pointer-events: none;
+}
+.input-with-prefix { padding-left: 36px; }
+
+.form-label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* ════════════════════════════════════════
+   TOOLTIP
+════════════════════════════════════════ */
+.tooltip-wrap { position: relative; display: inline-flex; align-items: center; }
+
+.tooltip-icon {
+  width: 16px; height: 16px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 0.65rem; font-weight: 700;
+  color: var(--accent-neon);
+  cursor: help;
+  margin-left: 6px;
+  flex-shrink: 0;
+}
+
+.tooltip-content {
+  position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+  background: var(--bg-mid);
+  border: 1px solid var(--border-hover);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  width: 220px;
+  font-size: 0.78rem; line-height: 1.5;
+  color: var(--text-secondary);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  z-index: 100;
+  white-space: normal;
+}
+
+.tooltip-wrap:hover .tooltip-content { opacity: 1; }
+
+/* ════════════════════════════════════════
+   PROGRESS BARS
+════════════════════════════════════════ */
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(56, 189, 248, 0.1);
+  border-radius: 100px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 24px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3));
+  border-radius: 100px;
+}
+
+.progress-for   { background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green)); }
+.progress-against { background: linear-gradient(90deg, #f87171, #ef4444); }
+.progress-health-good { background: linear-gradient(90deg, #34D399, #10B981); }
+.progress-health-warn { background: linear-gradient(90deg, #F59E0B, #D97706); }
+.progress-health-bad  { background: linear-gradient(90deg, #F87171, #EF4444); }
+
+/* ════════════════════════════════════════
+   TOAST NOTIFICATIONS
+════════════════════════════════════════ */
+.toast-container {
+  position: fixed; bottom: 28px; right: 28px;
+  z-index: 9999;
+  display: flex; flex-direction: column; gap: 10px;
+  pointer-events: none;
+}
+
+.toast {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 14px 18px;
+  background: var(--bg-mid);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  min-width: 300px; max-width: 380px;
+  pointer-events: all;
+  animation: toastIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.toast.leaving {
+  opacity: 0;
+  transform: translateX(120%);
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(120%); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.toast-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 1px; }
+.toast-body { flex: 1; }
+.toast-title { font-size: 0.88rem; font-weight: 700; margin-bottom: 2px; }
+.toast-message { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4; }
+
+.toast-success { border-left: 3px solid var(--accent-green); }
+.toast-error   { border-left: 3px solid var(--accent-red); }
+.toast-info    { border-left: 3px solid var(--accent-neon); }
+.toast-warning { border-left: 3px solid var(--accent-gold); }
+
+/* ════════════════════════════════════════
+   MODAL
+════════════════════════════════════════ */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(6, 13, 26, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 9000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s;
+}
+
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+
+.modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border-hover);
+  border-radius: var(--radius-xl);
+  padding: 32px;
+  max-width: 480px; width: 100%;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6), var(--glow-sm);
+  transform: scale(0.94) translateY(16px);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-overlay.open .modal { transform: scale(1) translateY(0); }
+
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.modal-title { font-size: 1.3rem; font-weight: 700; }
+
+.modal-close {
+  width: 32px; height: 32px;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+.modal-close:hover { border-color: var(--border-hover); color: var(--text-primary); }
+
+/* ════════════════════════════════════════
+   NFT MARKETPLACE
+════════════════════════════════════════ */
+.marketplace-filters {
+  display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+.nft-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.nft-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.nft-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.5), var(--glow-sm);
+}
+
+.nft-image {
+  width: 100%;
+  aspect-ratio: 1;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  overflow: hidden;
+  font-size: 4rem;
+}
+
+.nft-image-bg {
+  position: absolute; inset: 0;
+  transition: transform 0.4s ease;
+}
+
+.nft-card:hover .nft-image-bg { transform: scale(1.05); }
+
+.nft-rarity {
+  position: absolute; top: 10px; right: 10px;
+}
+
+.nft-info { padding: 16px; }
+
+.nft-collection {
+  font-size: 0.74rem; font-weight: 600;
+  color: var(--accent-neon);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 4px;
+}
+
+.nft-name {
+  font-family: var(--font-display);
+  font-size: 1rem; font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.nft-price-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.nft-price-label { font-size: 0.75rem; color: var(--text-muted); }
+.nft-price-value {
+  font-family: var(--font-mono);
+  font-size: 0.95rem; font-weight: 600;
+  color: var(--accent-cyan);
+}
+
+.nft-btc { font-size: 0.74rem; color: var(--text-muted); margin-top: 1px; }
+
+.nft-actions { display: flex; gap: 8px; }
+
+/* Floor banner */
+.floor-banner {
+  display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 28px;
+}
+
+.floor-item {
+  flex: 1; min-width: 160px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+
+.floor-collection { font-size: 0.78rem; color: var(--text-secondary); }
+.floor-price {
+  font-family: var(--font-mono);
+  font-size: 1.1rem; font-weight: 700;
+  color: var(--accent-gold);
+}
+.floor-change { font-size: 0.74rem; }
+.floor-up { color: var(--accent-green); }
+.floor-down { color: var(--accent-red); }
+
+/* ════════════════════════════════════════
+   LENDING PLATFORM
+════════════════════════════════════════ */
+.lending-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 768px) { .lending-grid { grid-template-columns: 1fr; } }
+
+.asset-table { width: 100%; border-collapse: collapse; }
+.asset-table th {
+  font-size: 0.74rem; font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0 12px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.asset-table td {
+  padding: 14px 12px;
+  font-size: 0.88rem;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.06);
+}
+
+.asset-table tr:last-child td { border-bottom: none; }
+
+.asset-table tr:hover td { background: rgba(56, 189, 248, 0.03); }
+
+.asset-icon {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.health-meter {
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 16px;
+  background: var(--bg-input);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.health-number {
+  font-family: var(--font-mono);
+  font-size: 1.8rem; font-weight: 700;
+  line-height: 1;
+}
+
+.health-good  { color: var(--accent-green); }
+.health-warn  { color: var(--accent-gold); }
+.health-bad   { color: var(--accent-red); }
+
+.metric-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+
+.metric-label {
+  display: flex; align-items: center;
+  font-size: 0.78rem; font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.metric-value {
+  font-family: var(--font-mono);
+  font-size: 1.5rem; font-weight: 700;
+  color: var(--text-primary);
+}
+
+.metric-sub { font-size: 0.78rem; color: var(--text-muted); }
+
+.metrics-row { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 24px; }
+.metrics-row .metric-card { flex: 1; min-width: 130px; }
+
+/* ════════════════════════════════════════
+   DAO HUB
+════════════════════════════════════════ */
+.dao-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 900px) { .dao-grid { grid-template-columns: 1fr; } }
+
+.proposal-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 16px;
+  transition: var(--transition);
+}
+
+.proposal-card:hover { border-color: var(--border-hover); }
+
+.proposal-header {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+  margin-bottom: 16px;
+}
+
+.proposal-id {
+  font-family: var(--font-mono);
+  font-size: 0.76rem; color: var(--text-muted);
+}
+
+.proposal-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem; font-weight: 700;
+  margin: 6px 0;
+  line-height: 1.3;
+}
+
+.proposal-desc { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.55; margin-bottom: 20px; }
+
+.vote-bars { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+
+.vote-row { display: flex; align-items: center; gap: 10px; }
+.vote-label { font-size: 0.78rem; font-weight: 600; width: 60px; flex-shrink: 0; }
+.vote-pct { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-secondary); width: 40px; text-align: right; }
+
+.proposal-footer {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  flex-wrap: wrap;
+}
+
+.proposal-meta { display: flex; gap: 16px; font-size: 0.78rem; color: var(--text-muted); }
+.proposal-meta span { display: flex; align-items: center; gap: 4px; }
+
+.vote-actions { display: flex; gap: 8px; }
+
+/* Treasury Card */
+.treasury-card {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.06) 0%, rgba(100, 255, 218, 0.03) 100%);
+  border: 1px solid var(--border-hover);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.treasury-card::before {
+  content: '◈';
+  position: absolute;
+  right: -20px; bottom: -30px;
+  font-size: 8rem;
+  color: rgba(56, 189, 248, 0.04);
+  pointer-events: none;
+  font-family: var(--font-mono);
+}
+
+.treasury-balance {
+  font-family: var(--font-display);
+  font-size: 2.2rem; font-weight: 800;
+  color: var(--accent-cyan);
+  letter-spacing: -0.03em;
+  margin: 8px 0;
+}
+
+.dao-list-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.06);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.dao-list-item:hover { padding-left: 4px; }
+.dao-list-item:last-child { border-bottom: none; }
+
+.dao-avatar {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+}
+
+.dao-name { font-weight: 600; font-size: 0.9rem; }
+.dao-members { font-size: 0.78rem; color: var(--text-muted); }
+
+/* ════════════════════════════════════════
+   DIVIDER
+════════════════════════════════════════ */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 32px 0;
+}
+
+/* ════════════════════════════════════════
+   LOADING SHIMMER
+════════════════════════════════════════ */
+.shimmer {
+  background: linear-gradient(90deg,
+    rgba(56, 189, 248, 0.04) 25%,
+    rgba(56, 189, 248, 0.1) 50%,
+    rgba(56, 189, 248, 0.04) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s infinite;
+  border-radius: var(--radius-md);
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ════════════════════════════════════════
+   HAMBURGER MENU
+════════════════════════════════════════ */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 38px; height: 38px;
+  padding: 8px;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  cursor: pointer;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+
+.hamburger:hover {
+  background: rgba(56, 189, 248, 0.16);
+  border-color: var(--border-hover);
+}
+
+.hamburger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--accent-neon);
+  border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* Mobile Drawer */
+.mobile-drawer {
+  position: fixed;
+  top: 68px; left: 0; right: 0;
+  background: rgba(6, 13, 26, 0.98);
+  backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid var(--border);
+  z-index: 999;
+  transform: translateY(-110%);
+  opacity: 0;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  pointer-events: none;
+  max-height: calc(100vh - 68px);
+  overflow-y: auto;
+}
+
+.mobile-drawer.open {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: all;
+}
+
+.drawer-inner {
+  padding: 20px 20px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.drawer-section-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 14px 12px 6px;
+}
+
+.drawer-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+  border: 1px solid transparent;
+  font-family: var(--font-body);
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+
+.drawer-nav-item:hover {
+  background: rgba(56, 189, 248, 0.07);
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+.drawer-nav-item.active {
+  background: rgba(56, 189, 248, 0.12);
+  color: var(--accent-neon);
+  border-color: rgba(56, 189, 248, 0.2);
+}
+
+.drawer-nav-icon {
+  width: 38px; height: 38px;
+  background: rgba(56, 189, 248, 0.08);
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.drawer-nav-item.active .drawer-nav-icon {
+  background: rgba(56, 189, 248, 0.18);
+}
+
+.drawer-nav-text { flex: 1; }
+.drawer-nav-sub { font-size: 0.75rem; font-weight: 400; color: var(--text-muted); margin-top: 1px; }
+
+.drawer-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 10px 0;
+}
+
+.drawer-wallet {
+  margin-top: 8px;
+  padding: 16px;
+  background: rgba(56, 189, 248, 0.05);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.drawer-wallet-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--accent-neon), var(--accent-cyan));
+  border: none; border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 1rem; font-weight: 700;
+  color: var(--bg-deep);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: var(--transition);
+}
+
+.drawer-wallet-btn.connected {
+  background: rgba(52, 211, 153, 0.15);
+  color: var(--accent-green);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+}
+
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  top: 68px;
+  background: rgba(0,0,0,0.5);
+  z-index: 998;
+  display: none;
+  backdrop-filter: blur(2px);
+}
+
+.drawer-overlay.open { display: block; }
+
+.mobile-tabs { display: none; }
+
+/* ════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .nav { padding: 0 16px; }
+  .nav-tabs { display: none; }
+  .hamburger { display: flex; }
+
+  /* hide BTC L1 label on small screens */
+  .nav-right .btc-label { display: none; }
+
+  /* shrink wallet button on mobile */
+  .btn-wallet {
+    padding: 9px 14px;
+    font-size: 0.82rem;
+  }
+
+  .container { padding: 0 16px; }
+
+  .hero { padding: 40px 16px 32px; }
+  .hero p { font-size: 0.95rem; }
+  .hero-stats { gap: 24px; }
+  .stat-value { font-size: 1.4rem; }
+
+  .nft-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+
+  .lending-grid { grid-template-columns: 1fr; }
+  .dao-grid { grid-template-columns: 1fr; }
+
+  .metrics-row { gap: 10px; }
+  .metrics-row .metric-card { min-width: 120px; }
+  .metric-value { font-size: 1.2rem; }
+
+  .section-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .section-header > div:last-child { width: 100%; }
+  .section-header .btn { width: 100%; justify-content: center; }
+
+  .floor-banner { gap: 10px; }
+  .floor-item { min-width: 140px; }
+
+  .proposal-footer { flex-direction: column; align-items: flex-start; }
+  .vote-actions { width: 100%; }
+  .vote-actions .btn { flex: 1; }
+
+  .treasury-balance { font-size: 1.7rem; }
+
+  .marketplace-filters { gap: 8px; }
+  .marketplace-filters input { min-width: 0; width: 100%; }
+
+  .modal { padding: 24px 18px; }
+
+  .asset-table th, .asset-table td { padding: 12px 8px; font-size: 0.82rem; }
+}
+
+@media (max-width: 480px) {
+  .nft-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .nft-info { padding: 12px; }
+  .nft-name { font-size: 0.88rem; }
+  .nft-actions { flex-direction: column; gap: 6px; }
+  .nft-actions .btn { width: 100%; }
+
+  .hero h1 { font-size: 2rem; }
+
+  .metrics-row { grid-template-columns: 1fr 1fr; display: grid; }
+  .metrics-row .metric-card { min-width: 0; }
+
+  .floor-banner { flex-direction: column; }
+  .floor-item { min-width: 0; width: 100%; }
+
+  .proposal-header { flex-direction: column; gap: 8px; }
+  .vote-actions { flex-wrap: wrap; }
+
+  .btn-lg { padding: 12px 20px; font-size: 0.92rem; }
+
+  .modal { padding: 20px 16px; }
+  .modal-title { font-size: 1.1rem; }
+}
+
+@media (min-width: 769px) {
+  .hamburger { display: none !important; }
+  .mobile-drawer { display: none !important; }
+  .drawer-overlay { display: none !important; }
+}
+
+/* ════════════════════════════════════════
+   MISC UTILITIES
+════════════════════════════════════════ */
+.flex { display: flex; }
+.flex-col { display: flex; flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-2 { gap: 8px; }
+.gap-3 { gap: 12px; }
+.gap-4 { gap: 16px; }
+.mt-2 { margin-top: 8px; }
+.mt-4 { margin-top: 16px; }
+.mt-6 { margin-top: 24px; }
+.mb-4 { margin-bottom: 16px; }
+.mb-6 { margin-bottom: 24px; }
+.text-sm { font-size: 0.85rem; }
+.text-xs { font-size: 0.76rem; }
+.text-muted { color: var(--text-muted); }
+.text-secondary { color: var(--text-secondary); }
+.text-neon { color: var(--accent-neon); }
+.text-cyan { color: var(--accent-cyan); }
+.text-green { color: var(--accent-green); }
+.text-red { color: var(--accent-red); }
+.text-gold { color: var(--accent-gold); }
+.font-mono { font-family: var(--font-mono); }
+.font-display { font-family: var(--font-display); }
+.font-bold { font-weight: 700; }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.w-full { width: 100%; }
+.pb-24 { padding-bottom: 96px; }
+
+/* Pulse animation for "live" indicators */
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.live-dot {
+  display: inline-block;
+  width: 7px; height: 7px;
+  background: var(--accent-green);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--accent-green);
+  animation: live-pulse 1.5s ease-in-out infinite;
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     NAVIGATION
+═══════════════════════════════════════ -->
+<nav class="nav">
+  <a class="nav-brand" onclick="showPage('home')">
+    <div class="logo-icon">⬡</div>
+    <span class="logo-text">NEXUS<span>.</span></span>
+  </a>
+
+  <div class="nav-tabs" id="navTabs">
+    <button class="nav-tab" onclick="showPage('home')">Overview</button>
+    <button class="nav-tab active" onclick="showPage('marketplace')">🛒 Marketplace</button>
+    <button class="nav-tab" onclick="showPage('lending')">💰 Lend / Borrow</button>
+    <button class="nav-tab" onclick="showPage('dao')">🏛 DAO Hub</button>
+  </div>
+
+  <div class="nav-right">
+    <div class="btc-label" style="display:flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:0.74rem;color:var(--text-muted);">
+      <span class="live-dot"></span> BTC L1
+    </div>
+    <button class="btn-wallet" id="walletBtn" onclick="toggleWallet()">
+      <span>⚡</span> Connect Wallet
+    </button>
+    <!-- Hamburger (mobile only) -->
+    <div class="hamburger" id="hamburger" onclick="toggleDrawer()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Drawer Overlay -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+
+<!-- Mobile Drawer -->
+<div class="mobile-drawer" id="mobileDrawer">
+  <div class="drawer-inner">
+    <span class="drawer-section-label">Navigation</span>
+
+    <button class="drawer-nav-item" onclick="drawerNav('home')">
+      <div class="drawer-nav-icon">🏠</div>
+      <div class="drawer-nav-text">
+        <div>Overview</div>
+        <div class="drawer-nav-sub">Protocol stats & features</div>
+      </div>
+    </button>
+
+    <button class="drawer-nav-item active" id="drawer-marketplace" onclick="drawerNav('marketplace')">
+      <div class="drawer-nav-icon">🛒</div>
+      <div class="drawer-nav-text">
+        <div>Marketplace</div>
+        <div class="drawer-nav-sub">Buy & sell OP_721 NFTs</div>
+      </div>
+    </button>
+
+    <button class="drawer-nav-item" id="drawer-lending" onclick="drawerNav('lending')">
+      <div class="drawer-nav-icon">💰</div>
+      <div class="drawer-nav-text">
+        <div>Lend / Borrow</div>
+        <div class="drawer-nav-sub">Earn yield · Borrow assets</div>
+      </div>
+    </button>
+
+    <button class="drawer-nav-item" id="drawer-dao" onclick="drawerNav('dao')">
+      <div class="drawer-nav-icon">🏛</div>
+      <div class="drawer-nav-text">
+        <div>DAO Hub</div>
+        <div class="drawer-nav-sub">Governance · Treasury · Proposals</div>
+      </div>
+    </button>
+
+    <div class="drawer-divider"></div>
+    <span class="drawer-section-label">Wallet</span>
+
+    <div class="drawer-wallet">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+        <span class="live-dot"></span>
+        <span style="font-family:var(--font-mono);font-size:0.76rem;color:var(--text-muted);">Bitcoin L1 · OP_NET</span>
+      </div>
+      <button class="drawer-wallet-btn" id="drawerWalletBtn" onclick="toggleWallet()">
+        <span>⚡</span> Connect Wallet
+      </button>
+    </div>
+
+    <div class="drawer-divider"></div>
+    <span class="drawer-section-label">Protocol Info</span>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:4px 0;">
+      <div style="background:rgba(56,189,248,0.06);border:1px solid var(--border);border-radius:10px;padding:12px;">
+        <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:4px;">TVL</div>
+        <div style="font-family:var(--font-mono);font-weight:700;color:var(--accent-neon);font-size:0.95rem;" id="drawerTVL">$48.2M</div>
+      </div>
+      <div style="background:rgba(56,189,248,0.06);border:1px solid var(--border);border-radius:10px;padding:12px;">
+        <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:4px;">Volume</div>
+        <div style="font-family:var(--font-mono);font-weight:700;color:var(--accent-cyan);font-size:0.95rem;">832 BTC</div>
+      </div>
+      <div style="background:rgba(56,189,248,0.06);border:1px solid var(--border);border-radius:10px;padding:12px;">
+        <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:4px;">NFTs Traded</div>
+        <div style="font-family:var(--font-mono);font-weight:700;color:var(--accent-green);font-size:0.95rem;">12,841</div>
+      </div>
+      <div style="background:rgba(56,189,248,0.06);border:1px solid var(--border);border-radius:10px;padding:12px;">
+        <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:4px;">Active DAOs</div>
+        <div style="font-family:var(--font-mono);font-weight:700;color:var(--accent-purple);font-size:0.95rem;">24</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+
+<!-- ═══════════════════════════════════════
+     HOME / OVERVIEW PAGE
+═══════════════════════════════════════ -->
+<div class="page active" id="page-home">
+  <div class="container pb-24">
+    <div class="hero">
+      <h1>The Future of DeFi<br>Lives on Bitcoin</h1>
+      <p>Nexus is the first all-in-one DeFi super-app natively on Bitcoin L1 — trade NFTs, lend assets, borrow against collateral, and govern your protocol, all without leaving the chain.</p>
+
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-lg" onclick="showPage('marketplace')">
+          🛒 Explore Marketplace
+        </button>
+        <button class="btn btn-secondary btn-lg" onclick="showPage('lending')">
+          💰 Start Lending
+        </button>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-value" id="tvlStat">$0</span>
+          <span class="stat-label">Total Value Locked</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" id="nftStat">0</span>
+          <span class="stat-label">NFTs Traded</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" id="daoStat">0</span>
+          <span class="stat-label">Active DAOs</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" id="volStat">0 BTC</span>
+          <span class="stat-label">Protocol Volume</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Feature grid -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;">
+      <div class="card" onclick="showPage('marketplace')" style="cursor:pointer">
+        <div style="font-size:2.2rem;margin-bottom:16px;">🎨</div>
+        <h3 class="font-display" style="font-size:1.1rem;font-weight:700;margin-bottom:8px;">NFT Marketplace</h3>
+        <p class="text-sm text-secondary" style="line-height:1.6;margin-bottom:16px;">Trade OP_721 artifacts natively on BTC. Floor price tracking, royalties, and instant settlement.</p>
+        <span class="badge badge-blue">OP_721 Standard</span>
+      </div>
+      <div class="card" onclick="showPage('lending')" style="cursor:pointer">
+        <div style="font-size:2.2rem;margin-bottom:16px;">💎</div>
+        <h3 class="font-display" style="font-size:1.1rem;font-weight:700;margin-bottom:8px;">Lending Protocol</h3>
+        <p class="text-sm text-secondary" style="line-height:1.6;margin-bottom:16px;">Deposit OP_20 tokens, earn yield, borrow against ERC20 or NFT collateral with real-time health factors.</p>
+        <span class="badge badge-green">Up to 12% APY</span>
+      </div>
+      <div class="card" onclick="showPage('dao')" style="cursor:pointer">
+        <div style="font-size:2.2rem;margin-bottom:16px;">🏛</div>
+        <h3 class="font-display" style="font-size:1.1rem;font-weight:700;margin-bottom:8px;">DAO Hub</h3>
+        <p class="text-sm text-secondary" style="line-height:1.6;margin-bottom:16px;">Create DAOs, submit proposals, vote on-chain with token-weighted governance, and manage treasury funds.</p>
+        <span class="badge badge-purple">On-Chain Governance</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     MARKETPLACE PAGE
+═══════════════════════════════════════ -->
+<div class="page" id="page-marketplace">
+  <div class="container pb-24">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">NFT <span>Marketplace</span></h2>
+        <p class="section-subtitle">Native OP_721 artifacts on Bitcoin L1</p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-secondary btn-sm" onclick="openListModal()">+ List My NFT</button>
+        <button class="btn btn-primary btn-sm" onclick="showPage('lending')">Use NFT as Collateral →</button>
+      </div>
+    </div>
+
+    <!-- Floor prices banner -->
+    <div class="floor-banner" id="floorBanner">
+      <div class="floor-item">
+        <span class="floor-collection">⚡ Nexus Genesis</span>
+        <span class="floor-price">0.42 BTC</span>
+        <span class="floor-change floor-up">▲ +8.3%</span>
+      </div>
+      <div class="floor-item">
+        <span class="floor-collection">🔮 Cipher Punks</span>
+        <span class="floor-price">0.18 BTC</span>
+        <span class="floor-change floor-up">▲ +2.1%</span>
+      </div>
+      <div class="floor-item">
+        <span class="floor-collection">🌊 Satoshi Waves</span>
+        <span class="floor-price">0.09 BTC</span>
+        <span class="floor-change floor-down">▼ -1.5%</span>
+      </div>
+      <div class="floor-item">
+        <span class="floor-collection">🏔 Block Summit</span>
+        <span class="floor-price">0.055 BTC</span>
+        <span class="floor-change floor-up">▲ +12.7%</span>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="marketplace-filters">
+      <select class="input select" style="width:auto;min-width:160px;" onchange="filterNFTs(this.value)">
+        <option value="all">All Collections</option>
+        <option value="genesis">⚡ Nexus Genesis</option>
+        <option value="cipher">🔮 Cipher Punks</option>
+        <option value="waves">🌊 Satoshi Waves</option>
+        <option value="summit">🏔 Block Summit</option>
+      </select>
+      <select class="input select" style="width:auto;min-width:140px;">
+        <option>Sort: Recently Listed</option>
+        <option>Sort: Price ↑</option>
+        <option>Sort: Price ↓</option>
+        <option>Sort: Rarest First</option>
+      </select>
+      <input class="input" placeholder="🔍  Search by name or ID…" style="flex:1;max-width:300px;">
+    </div>
+
+    <!-- NFT Grid -->
+    <div class="nft-grid" id="nftGrid">
+      <!-- Dynamically rendered by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     LENDING PAGE
+═══════════════════════════════════════ -->
+<div class="page" id="page-lending">
+  <div class="container pb-24">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Lend / <span>Borrow</span></h2>
+        <p class="section-subtitle">Earn yield on deposits · Borrow against your assets</p>
+      </div>
+    </div>
+
+    <!-- Top metrics -->
+    <div class="metrics-row">
+      <div class="metric-card">
+        <span class="metric-label">
+          Net APY
+          <div class="tooltip-wrap">
+            <span class="tooltip-icon">?</span>
+            <div class="tooltip-content">Annual Percentage Yield earned on your supplied assets, net of borrowing costs. Calculated from supply/borrow utilization rates using a kinked interest rate model.</div>
+          </div>
+        </span>
+        <span class="metric-value text-green">+8.42%</span>
+        <span class="metric-sub">On supplied assets</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">
+          Collateral Health
+          <div class="tooltip-wrap">
+            <span class="tooltip-icon">?</span>
+            <div class="tooltip-content">Health Factor = weighted collateral value ÷ total debt. Values above 1.0 are safe. Below 1.0 triggers liquidation. Keep above 1.5 to stay safe.</div>
+          </div>
+        </span>
+        <span class="metric-value health-good" id="healthValue">2.41</span>
+        <span class="metric-sub">Safe (liquidation &lt; 1.0)</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">
+          LTV Ratio
+          <div class="tooltip-wrap">
+            <span class="tooltip-icon">?</span>
+            <div class="tooltip-content">Loan-to-Value ratio: your borrowed amount divided by collateral value. Max LTV is 75%. Exceeding 80% triggers liquidation.</div>
+          </div>
+        </span>
+        <span class="metric-value text-gold">41.3%</span>
+        <span class="metric-sub">Max 75% · Liq. at 80%</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">Total Supplied</span>
+        <span class="metric-value">$12,450</span>
+        <span class="metric-sub">Across 3 markets</span>
+      </div>
+    </div>
+
+    <div class="lending-grid">
+      <!-- LEFT: Supply Markets -->
+      <div>
+        <div class="card mb-4" style="padding:20px 0 8px;">
+          <div style="padding:0 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;">
+            <h3 class="font-display" style="font-size:1rem;font-weight:700;">Supply Markets</h3>
+            <span class="badge badge-blue">Earn yield</span>
+          </div>
+          <table class="asset-table">
+            <thead>
+              <tr>
+                <th>Asset</th>
+                <th>APY <div class="tooltip-wrap" style="display:inline-flex"><span class="tooltip-icon">?</span><div class="tooltip-content">Supply APY: interest earned per year by depositing this asset. Rates update every block.</div></div></th>
+                <th>Your Balance</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="supplyTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- RIGHT: Borrow Markets -->
+      <div>
+        <div class="card mb-4" style="padding:20px 0 8px;">
+          <div style="padding:0 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;">
+            <h3 class="font-display" style="font-size:1rem;font-weight:700;">Borrow Markets</h3>
+            <span class="badge badge-gold">Use collateral</span>
+          </div>
+          <table class="asset-table">
+            <thead>
+              <tr>
+                <th>Asset</th>
+                <th>Borrow APY</th>
+                <th>Available</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="borrowTable"></tbody>
+          </table>
+        </div>
+
+        <!-- Flash Loan info card -->
+        <div class="card" style="background:linear-gradient(135deg,rgba(129,140,248,0.08),rgba(56,189,248,0.05));">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <span style="font-size:1.4rem;">⚡</span>
+            <div>
+              <div style="font-weight:700;font-size:0.95rem;">Flash Loans</div>
+              <div class="text-xs text-muted">Advanced Feature</div>
+            </div>
+            <div class="tooltip-wrap" style="margin-left:auto;">
+              <span class="tooltip-icon" style="width:20px;height:20px;font-size:0.75rem;">?</span>
+              <div class="tooltip-content">Flash Loans let you borrow any amount with 0 collateral — as long as you repay within the same Bitcoin transaction. Used for arbitrage, liquidations, and collateral swaps. Fee: 0.09%.</div>
+            </div>
+          </div>
+          <p class="text-sm text-secondary" style="line-height:1.6;margin-bottom:16px;">
+            Uncollateralized loans for atomic arbitrage, liquidation bots, and collateral swaps. Borrow any liquidity — repay in the same transaction.
+          </p>
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:16px;">
+            <span class="badge badge-purple">0.09% Fee</span>
+            <span class="badge badge-blue">Same-Tx Repayment</span>
+            <span class="badge badge-green">Atomic</span>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="openFlashLoanModal()">⚡ Execute Flash Loan</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Health factor visualizer -->
+    <div class="card mt-6">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+        <h3 class="font-display" style="font-size:1rem;font-weight:700;">Position Health Monitor</h3>
+        <span class="badge badge-green">● HEALTHY</span>
+      </div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:200px;">
+          <div class="form-label" style="margin-bottom:8px;">Collateral Health Factor</div>
+          <div class="health-meter">
+            <span class="health-number health-good" id="hfDisplay">2.41</span>
+            <div class="progress-bar" style="height:10px;margin-top:6px;">
+              <div class="progress-fill progress-health-good" id="hfBar" style="width:75%"></div>
+            </div>
+            <div class="text-xs text-muted" style="margin-top:4px;">Liquidation threshold: 1.00</div>
+          </div>
+        </div>
+        <div style="flex:2;min-width:240px;">
+          <div class="form-label" style="margin-bottom:8px;">Adjust Simulated Health Factor</div>
+          <input type="range" min="50" max="300" value="241" class="w-full" id="hfSlider"
+            oninput="updateHealthFactor(this.value)"
+            style="accent-color: var(--accent-neon); cursor:pointer; width:100%;">
+          <div class="text-xs text-secondary" style="margin-top:6px;">Drag slider to simulate your position health under different LTV scenarios</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     DAO HUB PAGE
+═══════════════════════════════════════ -->
+<div class="page" id="page-dao">
+  <div class="container pb-24">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">DAO <span>Hub</span></h2>
+        <p class="section-subtitle">On-chain governance · Token-weighted voting · Treasury management</p>
+      </div>
+      <button class="btn btn-primary" onclick="openCreateDAOModal()">+ Create DAO</button>
+    </div>
+
+    <div class="dao-grid">
+      <!-- LEFT: Active Proposals -->
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+          <h3 class="font-display" style="font-size:1rem;font-weight:700;">Active Proposals</h3>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-secondary btn-sm" onclick="openCreateProposalModal()">+ New Proposal</button>
+            <select class="input select" style="width:auto;font-size:0.82rem;padding:8px 32px 8px 12px;">
+              <option>All DAOs</option>
+              <option>⚡ Nexus Core</option>
+              <option>🌊 Wave Protocol</option>
+              <option>🔮 Cipher Guild</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="proposalsList"></div>
+      </div>
+
+      <!-- RIGHT: DAOs + Treasury -->
+      <div>
+        <!-- Treasury overview -->
+        <div class="treasury-card">
+          <div class="text-xs text-muted" style="text-transform:uppercase;letter-spacing:0.08em;">Protocol Treasury</div>
+          <div class="treasury-balance">4.82 BTC</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);margin-bottom:16px;">≈ $281,600 USD</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn btn-secondary btn-sm" onclick="openTreasuryModal()">Deposit to Treasury</button>
+            <button class="btn btn-outline btn-sm" onclick="showToast('info', 'Governance Required', 'Treasury withdrawals must be approved via DAO proposal.')">Request Withdrawal</button>
+          </div>
+        </div>
+
+        <!-- Active DAOs list -->
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+            <h3 class="font-display" style="font-size:0.95rem;font-weight:700;">Your DAOs</h3>
+            <span class="badge badge-blue">3 Active</span>
+          </div>
+
+          <div id="daoList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- ═══════════════════════════════════════
+     MODALS
+═══════════════════════════════════════ -->
+
+<!-- NFT Buy/List Modal -->
+<div class="modal-overlay" id="nftModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="nftModalTitle">Buy NFT</span>
+      <div class="modal-close" onclick="closeModal('nftModal')">✕</div>
+    </div>
+    <div id="nftModalContent"></div>
+  </div>
+</div>
+
+<!-- List NFT Modal -->
+<div class="modal-overlay" id="listModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">List NFT for Sale</span>
+      <div class="modal-close" onclick="closeModal('listModal')">✕</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <div>
+        <label class="form-label">Token ID</label>
+        <input class="input" placeholder="Enter your NFT token ID" id="listTokenId">
+      </div>
+      <div>
+        <label class="form-label">Collection</label>
+        <select class="input select" id="listCollection">
+          <option>⚡ Nexus Genesis</option>
+          <option>🔮 Cipher Punks</option>
+          <option>🌊 Satoshi Waves</option>
+          <option>🏔 Block Summit</option>
+        </select>
+      </div>
+      <div>
+        <label class="form-label">Price (BTC)</label>
+        <div class="input-group">
+          <span class="input-prefix">₿</span>
+          <input class="input input-with-prefix" type="number" step="0.001" placeholder="0.00" id="listPrice">
+        </div>
+      </div>
+      <div style="background:rgba(56,189,248,0.06);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;font-size:0.82rem;color:var(--text-secondary);">
+        ⚠️ Listing transfers your NFT into escrow until sold or delisted. Protocol fee: 2.5%.
+      </div>
+      <button class="btn btn-primary btn-full" onclick="submitListing()">List NFT →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Supply/Borrow Modal -->
+<div class="modal-overlay" id="lendModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="lendModalTitle">Supply Asset</span>
+      <div class="modal-close" onclick="closeModal('lendModal')">✕</div>
+    </div>
+    <div id="lendModalContent"></div>
+  </div>
+</div>
+
+<!-- Flash Loan Modal -->
+<div class="modal-overlay" id="flashModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">⚡ Flash Loan</span>
+      <div class="modal-close" onclick="closeModal('flashModal')">✕</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <div style="background:rgba(129,140,248,0.08);border:1px solid rgba(129,140,248,0.2);border-radius:var(--radius-md);padding:16px;font-size:0.83rem;color:var(--text-secondary);line-height:1.6;">
+        ⚡ Flash loans are uncollateralized — borrow any amount and repay in the same Bitcoin block. Perfect for arbitrage and liquidations.
+      </div>
+      <div>
+        <label class="form-label">Asset</label>
+        <select class="input select">
+          <option>🔵 WBTC · 245.8 available</option>
+          <option>🟡 USDT · 48,200 available</option>
+          <option>⚪ sBTC · 12.4 available</option>
+        </select>
+      </div>
+      <div>
+        <label class="form-label">Borrow Amount</label>
+        <input class="input" type="number" placeholder="0.00" id="flashAmount" oninput="calcFlashFee()">
+      </div>
+      <div id="flashFeeDisplay" style="display:none;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;font-size:0.83rem;">
+        <div class="flex justify-between"><span class="text-secondary">Amount:</span><span class="font-mono text-neon" id="flashAmtDisplay">—</span></div>
+        <div class="flex justify-between mt-2"><span class="text-secondary">Fee (0.09%):</span><span class="font-mono" id="flashFeeCalc">—</span></div>
+        <div class="flex justify-between mt-2" style="border-top:1px solid var(--border);padding-top:10px;"><span class="text-secondary font-bold">Repay:</span><span class="font-mono font-bold text-cyan" id="flashRepayTotal">—</span></div>
+      </div>
+      <div>
+        <label class="form-label">Receiver Contract Address</label>
+        <input class="input font-mono" placeholder="bc1p…" style="font-size:0.82rem;">
+      </div>
+      <button class="btn btn-primary btn-full" onclick="executeFlashLoan()">⚡ Execute Flash Loan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Create DAO Modal -->
+<div class="modal-overlay" id="createDaoModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">🏛 Create New DAO</span>
+      <div class="modal-close" onclick="closeModal('createDaoModal')">✕</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <div>
+        <label class="form-label">DAO Name</label>
+        <input class="input" placeholder="e.g. Nexus Core, Wave Protocol…" id="daoName">
+      </div>
+      <div>
+        <label class="form-label">Governance Token Address</label>
+        <input class="input font-mono" placeholder="OP_20 token contract address" id="daoToken" style="font-size:0.82rem;">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <label class="form-label">Quorum (% of supply)</label>
+          <input class="input" type="number" value="4" min="1" max="50" id="daoQuorum">
+        </div>
+        <div>
+          <label class="form-label">Voting Period (blocks)</label>
+          <input class="input" type="number" value="1008" id="daoVotingPeriod">
+        </div>
+      </div>
+      <div>
+        <label class="form-label">Timelock (blocks)</label>
+        <input class="input" type="number" value="144" placeholder="≈ 1 day at 10-min blocks" id="daoTimelock">
+      </div>
+      <button class="btn btn-primary btn-full" onclick="submitCreateDAO()">Deploy DAO →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Create Proposal Modal -->
+<div class="modal-overlay" id="createProposalModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">📋 Create Proposal</span>
+      <div class="modal-close" onclick="closeModal('createProposalModal')">✕</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <div>
+        <label class="form-label">Select DAO</label>
+        <select class="input select">
+          <option>⚡ Nexus Core (DAO #1)</option>
+          <option>🌊 Wave Protocol (DAO #2)</option>
+          <option>🔮 Cipher Guild (DAO #3)</option>
+        </select>
+      </div>
+      <div>
+        <label class="form-label">Proposal Title</label>
+        <input class="input" placeholder="Short, clear title…" id="propTitle">
+      </div>
+      <div>
+        <label class="form-label">Description</label>
+        <textarea class="input" rows="4" placeholder="Describe your proposal in detail…" id="propDesc" style="resize:vertical;line-height:1.5;"></textarea>
+      </div>
+      <div>
+        <label class="form-label">On-Chain Action (optional)</label>
+        <input class="input font-mono" placeholder="Target contract address" style="font-size:0.82rem;margin-bottom:8px;">
+        <input class="input font-mono" placeholder="Encoded calldata (hex)" style="font-size:0.82rem;">
+      </div>
+      <button class="btn btn-primary btn-full" onclick="submitProposal()">Submit Proposal →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Treasury Deposit Modal -->
+<div class="modal-overlay" id="treasuryModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">🏦 Deposit to Treasury</span>
+      <div class="modal-close" onclick="closeModal('treasuryModal')">✕</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <div>
+        <label class="form-label">Select DAO</label>
+        <select class="input select">
+          <option>⚡ Nexus Core</option>
+          <option>🌊 Wave Protocol</option>
+          <option>🔮 Cipher Guild</option>
+        </select>
+      </div>
+      <div>
+        <label class="form-label">Amount (BTC)</label>
+        <div class="input-group">
+          <span class="input-prefix">₿</span>
+          <input class="input input-with-prefix" type="number" step="0.001" placeholder="0.00">
+        </div>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="submitTreasuryDeposit()">Deposit to Treasury →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ═══════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════
+const state = {
+  walletConnected: false,
+  walletAddress: null,
+  activeTab: 'home',
+};
+
+// ═══════════════════════════════════════════════
+//  HAMBURGER DRAWER
+// ═══════════════════════════════════════════════
+function toggleDrawer() {
+  const drawer = document.getElementById('mobileDrawer');
+  const overlay = document.getElementById('drawerOverlay');
+  const hamburger = document.getElementById('hamburger');
+  const isOpen = drawer.classList.contains('open');
+  if (isOpen) {
+    closeDrawer();
+  } else {
+    drawer.classList.add('open');
+    overlay.classList.add('open');
+    hamburger.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeDrawer() {
+  document.getElementById('mobileDrawer').classList.remove('open');
+  document.getElementById('drawerOverlay').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function drawerNav(page) {
+  // Update active state in drawer
+  document.querySelectorAll('.drawer-nav-item').forEach(el => el.classList.remove('active'));
+  const target = document.getElementById('drawer-' + page);
+  if (target) target.classList.add('active');
+  showPage(page);
+  closeDrawer();
+}
+
+
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  state.activeTab = name;
+
+  // Update nav tabs
+  const tabMap = { home: 0, marketplace: 1, lending: 2, dao: 3 };
+  const tabs = document.querySelectorAll('#navTabs .nav-tab');
+  if (tabMap[name] !== undefined) tabs[tabMap[name]]?.classList.add('active');
+}
+
+// ═══════════════════════════════════════════════
+//  WALLET
+// ═══════════════════════════════════════════════
+function toggleWallet() {
+  if (state.walletConnected) {
+    state.walletConnected = false;
+    state.walletAddress = null;
+    const btn = document.getElementById('walletBtn');
+    btn.classList.remove('connected');
+    btn.innerHTML = '<span>⚡</span> Connect Wallet';
+    const drawerBtn = document.getElementById('drawerWalletBtn');
+    if (drawerBtn) { drawerBtn.classList.remove('connected'); drawerBtn.innerHTML = '<span>⚡</span> Connect Wallet'; }
+    showToast('info', 'Wallet Disconnected', 'Your OP_WALLET has been disconnected.');
+  } else {
+    connectWallet();
+  }
+}
+
+function connectWallet() {
+  showToast('info', 'Connecting…', 'Requesting OP_WALLET connection via BTC L1…');
+  setTimeout(() => {
+    state.walletConnected = true;
+    state.walletAddress = 'bc1p' + Math.random().toString(36).substr(2, 38);
+    const btn = document.getElementById('walletBtn');
+    btn.classList.add('connected');
+    btn.innerHTML = `<span class="wallet-dot"></span> ${state.walletAddress.substr(0, 10)}…${state.walletAddress.substr(-4)}`;
+    const drawerBtn = document.getElementById('drawerWalletBtn');
+    if (drawerBtn) { drawerBtn.classList.add('connected'); drawerBtn.innerHTML = `<span class="wallet-dot"></span> ${state.walletAddress.substr(0, 10)}…${state.walletAddress.substr(-4)}`; }
+    showToast('success', 'Wallet Connected!', 'OP_WALLET linked. Welcome to the Nexus Protocol.');
+    animateStats();
+  }, 1200);
+}
+
+function animateStats() {
+  const targets = [
+    { id: 'tvlStat', target: '$48.2M', steps: 40 },
+    { id: 'nftStat', target: '12,841', steps: 40 },
+    { id: 'daoStat', target: '24', steps: 24 },
+    { id: 'volStat', target: '832 BTC', steps: 30 },
+  ];
+  targets.forEach(({ id, target, steps }) => {
+    let i = 0;
+    const el = document.getElementById(id);
+    if (!el) return;
+    const iv = setInterval(() => {
+      i++;
+      // Show random digits until near end
+      if (i < steps - 3) {
+        const n = Math.floor(Math.random() * 9999);
+        el.textContent = id.includes('btc') || id === 'volStat' ? n + ' BTC' : id === 'tvlStat' ? '$' + n + 'K' : n;
+      } else {
+        el.textContent = target;
+        clearInterval(iv);
+      }
+    }, 40);
+  });
+}
+
+// ═══════════════════════════════════════════════
+//  NFT DATA & RENDERING
+// ═══════════════════════════════════════════════
+const nftData = [
+  { id: 1, name: 'Genesis #0042', collection: 'genesis', collectionLabel: '⚡ Nexus Genesis', rarity: 'Legendary', price: 0.42, usd: 24528, emoji: '⚡', bg: 'linear-gradient(135deg,#1a0533,#0d1b40)', owner: 'bc1p...3f4a' },
+  { id: 2, name: 'Cipher Punk #117', collection: 'cipher', collectionLabel: '🔮 Cipher Punks', rarity: 'Rare', price: 0.18, usd: 10512, emoji: '🔮', bg: 'linear-gradient(135deg,#001a1a,#0d2240)', owner: 'bc1p...8b2c' },
+  { id: 3, name: 'Satoshi Wave #888', collection: 'waves', collectionLabel: '🌊 Satoshi Waves', rarity: 'Uncommon', price: 0.09, usd: 5256, emoji: '🌊', bg: 'linear-gradient(135deg,#001133,#003322)', owner: 'bc1p...9d1e' },
+  { id: 4, name: 'Block Summit #23', collection: 'summit', collectionLabel: '🏔 Block Summit', rarity: 'Common', price: 0.055, usd: 3213, emoji: '🏔', bg: 'linear-gradient(135deg,#0d1b40,#1a330d)', owner: 'bc1p...5f7a' },
+  { id: 5, name: 'Genesis #0007', collection: 'genesis', collectionLabel: '⚡ Nexus Genesis', rarity: 'Legendary', price: 0.55, usd: 32130, emoji: '⚡', bg: 'linear-gradient(135deg,#1a1a00,#0d0d33)', owner: 'bc1p...2c3b' },
+  { id: 6, name: 'Cipher Punk #404', collection: 'cipher', collectionLabel: '🔮 Cipher Punks', rarity: 'Epic', price: 0.22, usd: 12852, emoji: '🔮', bg: 'linear-gradient(135deg,#1a0011,#001a33)', owner: 'bc1p...7e8f' },
+  { id: 7, name: 'Satoshi Wave #333', collection: 'waves', collectionLabel: '🌊 Satoshi Waves', rarity: 'Rare', price: 0.12, usd: 7008, emoji: '🌊', bg: 'linear-gradient(135deg,#001a2a,#1a0033)', owner: 'bc1p...1a2b' },
+  { id: 8, name: 'Block Summit #99', collection: 'summit', collectionLabel: '🏔 Block Summit', rarity: 'Uncommon', price: 0.062, usd: 3621, emoji: '🏔', bg: 'linear-gradient(135deg,#0d2a0d,#1a0d33)', owner: 'bc1p...6c4d' },
+];
+
+const rarityBadge = { 'Legendary': 'badge-gold', 'Epic': 'badge-purple', 'Rare': 'badge-blue', 'Uncommon': 'badge-green', 'Common': 'badge-muted' };
+
+function renderNFTs(filter = 'all') {
+  const grid = document.getElementById('nftGrid');
+  const filtered = filter === 'all' ? nftData : nftData.filter(n => n.collection === filter);
+  grid.innerHTML = filtered.map(nft => `
+    <div class="nft-card" onclick="openNFTModal(${nft.id})">
+      <div class="nft-image" style="background:${nft.bg};">
+        <div class="nft-image-bg" style="background:${nft.bg};width:100%;height:100%;"></div>
+        <span style="position:relative;z-index:1;font-size:4.5rem;filter:drop-shadow(0 0 20px rgba(56,189,248,0.4));">${nft.emoji}</span>
+        <div class="nft-rarity"><span class="badge ${rarityBadge[nft.rarity] || 'badge-blue'}">${nft.rarity}</span></div>
+      </div>
+      <div class="nft-info">
+        <div class="nft-collection">${nft.collectionLabel}</div>
+        <div class="nft-name">${nft.name}</div>
+        <div class="nft-price-row">
+          <div>
+            <div class="nft-price-label">Listed Price</div>
+            <div class="nft-price-value">₿ ${nft.price}</div>
+            <div class="nft-btc">≈ $${nft.usd.toLocaleString()}</div>
+          </div>
+        </div>
+        <div class="nft-actions">
+          <button class="btn btn-primary btn-sm" style="flex:1;" onclick="event.stopPropagation();buyNFT(${nft.id})">Buy Now</button>
+          <button class="btn btn-outline btn-sm" onclick="event.stopPropagation();openListModal()">List</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterNFTs(val) { renderNFTs(val); }
+
+function openNFTModal(id) {
+  const nft = nftData.find(n => n.id === id);
+  if (!nft) return;
+  document.getElementById('nftModalTitle').textContent = nft.name;
+  document.getElementById('nftModalContent').innerHTML = `
+    <div style="display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap;">
+      <div style="width:120px;height:120px;background:${nft.bg};border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:3rem;flex-shrink:0;">${nft.emoji}</div>
+      <div style="flex:1;">
+        <div class="nft-collection">${nft.collectionLabel}</div>
+        <div style="font-family:var(--font-display);font-size:1.3rem;font-weight:700;margin:4px 0;">${nft.name}</div>
+        <span class="badge ${rarityBadge[nft.rarity] || 'badge-blue'}">${nft.rarity}</span>
+        <div style="margin-top:12px;font-size:0.82rem;color:var(--text-secondary);">Owner: <span class="font-mono" style="font-size:0.8rem;">${nft.owner}</span></div>
+      </div>
+    </div>
+    <div style="background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px;margin-bottom:20px;">
+      <div class="flex justify-between mb-4">
+        <span class="text-secondary text-sm">Current Price</span>
+        <span class="font-mono font-bold text-cyan" style="font-size:1.2rem;">₿ ${nft.price}</span>
+      </div>
+      <div class="flex justify-between">
+        <span class="text-secondary text-sm">USD Value</span>
+        <span class="font-mono">$${nft.usd.toLocaleString()}</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="buyNFT(${nft.id})">Buy Now — ₿ ${nft.price}</button>
+      <button class="btn btn-secondary" onclick="closeModal('nftModal');openListModal()">List Yours</button>
+    </div>
+  `;
+  openModal('nftModal');
+}
+
+function buyNFT(id) {
+  const nft = nftData.find(n => n.id === id);
+  if (!nft) return;
+  closeModal('nftModal');
+  if (!state.walletConnected) {
+    showToast('error', 'Wallet Required', 'Please connect your OP_WALLET to purchase NFTs.');
+    return;
+  }
+  showToast('info', 'Confirm Transaction', `Signing BTC L1 transaction for ${nft.name}…`);
+  setTimeout(() => {
+    showToast('success', 'NFT Purchased! 🎉', `${nft.name} is now in your wallet. Tx confirmed on Bitcoin L1.`);
+  }, 2200);
+}
+
+// ═══════════════════════════════════════════════
+//  LENDING DATA & RENDERING
+// ═══════════════════════════════════════════════
+const supplyAssets = [
+  { symbol: 'WBTC', name: 'Wrapped Bitcoin', emoji: '🔵', apy: '4.85%', balance: '0.48 WBTC', balanceUsd: '$28,032', color: '#F59E0B' },
+  { symbol: 'USDT', name: 'Tether USD', emoji: '🟢', apy: '8.42%', balance: '2,400 USDT', balanceUsd: '$2,400', color: '#34D399' },
+  { symbol: 'sBTC', name: 'Stacked BTC', emoji: '🟣', apy: '6.10%', balance: '0.00', balanceUsd: '$0', color: '#818CF8' },
+];
+
+const borrowAssets = [
+  { symbol: 'WBTC', name: 'Wrapped Bitcoin', emoji: '🔵', apy: '7.20%', available: '124.8 WBTC', availableUsd: '$7.28M' },
+  { symbol: 'USDT', name: 'Tether USD', emoji: '🟢', apy: '9.85%', available: '4.82M USDT', availableUsd: '$4.82M' },
+  { symbol: 'sBTC', name: 'Stacked BTC', emoji: '🟣', apy: '8.40%', available: '52.3 sBTC', availableUsd: '$3.05M' },
+];
+
+function renderLendingTables() {
+  document.getElementById('supplyTable').innerHTML = supplyAssets.map(a => `
+    <tr>
+      <td>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="asset-icon" style="background:rgba(56,189,248,0.08);">${a.emoji}</div>
+          <div>
+            <div style="font-weight:600;">${a.symbol}</div>
+            <div class="text-xs text-muted">${a.name}</div>
+          </div>
+        </div>
+      </td>
+      <td><span class="text-green font-mono font-bold">${a.apy}</span></td>
+      <td>
+        <div style="font-weight:600;">${a.balance}</div>
+        <div class="text-xs text-muted">${a.balanceUsd}</div>
+      </td>
+      <td style="text-align:right;">
+        <button class="btn btn-primary btn-sm" onclick="openLendModal('supply','${a.symbol}','${a.apy}')">Supply</button>
+      </td>
+    </tr>
+  `).join('');
+
+  document.getElementById('borrowTable').innerHTML = borrowAssets.map(a => `
+    <tr>
+      <td>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="asset-icon" style="background:rgba(56,189,248,0.08);">${a.emoji}</div>
+          <div>
+            <div style="font-weight:600;">${a.symbol}</div>
+            <div class="text-xs text-muted">${a.name}</div>
+          </div>
+        </div>
+      </td>
+      <td><span class="text-gold font-mono font-bold">${a.apy}</span></td>
+      <td>
+        <div style="font-weight:600;">${a.available}</div>
+        <div class="text-xs text-muted">${a.availableUsd}</div>
+      </td>
+      <td style="text-align:right;">
+        <button class="btn btn-secondary btn-sm" onclick="openLendModal('borrow','${a.symbol}','${a.apy}')">Borrow</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function openLendModal(type, asset, apy) {
+  document.getElementById('lendModalTitle').textContent = type === 'supply' ? `Supply ${asset}` : `Borrow ${asset}`;
+  document.getElementById('lendModalContent').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <div style="background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;display:flex;justify-content:space-between;">
+        <span class="text-secondary text-sm">${type === 'supply' ? 'Supply APY' : 'Borrow APY'}</span>
+        <span class="font-mono font-bold ${type === 'supply' ? 'text-green' : 'text-gold'}">${apy}</span>
+      </div>
+      <div>
+        <label class="form-label">Amount (${asset})</label>
+        <input class="input font-mono" type="number" step="0.001" placeholder="0.00" id="lendAmount">
+      </div>
+      ${type === 'borrow' ? `
+      <div>
+        <label class="form-label">Collateral Type</label>
+        <select class="input select" id="collateralType" onchange="toggleNFTCollateral(this.value)">
+          <option value="erc20">ERC20 Token</option>
+          <option value="nft">NFT (OP_721)</option>
+        </select>
+      </div>
+      <div id="erc20Collateral">
+        <label class="form-label">Collateral Asset</label>
+        <select class="input select">
+          <option>WBTC · Balance: 0.48</option>
+          <option>USDT · Balance: 2,400</option>
+        </select>
+        <label class="form-label" style="margin-top:12px;">Collateral Amount</label>
+        <input class="input" type="number" step="0.001" placeholder="0.00">
+      </div>
+      <div id="nftCollateral" style="display:none;">
+        <label class="form-label">NFT Token ID</label>
+        <input class="input font-mono" placeholder="e.g. 42">
+        <div class="text-xs text-muted mt-2">NFT will be escrowed as collateral. Borrow up to 75% of its floor price.</div>
+      </div>
+      ` : ''}
+      <button class="btn btn-primary btn-full" onclick="submitLendAction('${type}','${asset}')">
+        ${type === 'supply' ? '📥 Supply ' + asset : '💸 Borrow ' + asset} →
+      </button>
+    </div>
+  `;
+  openModal('lendModal');
+}
+
+function toggleNFTCollateral(val) {
+  document.getElementById('erc20Collateral').style.display = val === 'nft' ? 'none' : 'block';
+  document.getElementById('nftCollateral').style.display = val === 'nft' ? 'block' : 'none';
+}
+
+function submitLendAction(type, asset) {
+  const amt = document.getElementById('lendAmount')?.value;
+  if (!amt || parseFloat(amt) <= 0) { showToast('error', 'Invalid Amount', 'Please enter a valid amount.'); return; }
+  if (!state.walletConnected) { showToast('error', 'Wallet Required', 'Connect your OP_WALLET first.'); return; }
+  closeModal('lendModal');
+  showToast('info', 'Signing Transaction…', `Preparing ${type} of ${amt} ${asset} on BTC L1…`);
+  setTimeout(() => {
+    showToast('success', type === 'supply' ? '📥 Supply Confirmed!' : '💸 Borrow Confirmed!',
+      `${amt} ${asset} ${type === 'supply' ? 'supplied to Nexus Lending Pool.' : 'borrowed. Repay before health factor drops below 1.0.'}`);
+  }, 2000);
+}
+
+function updateHealthFactor(val) {
+  const hf = (val / 100).toFixed(2);
+  document.getElementById('hfDisplay').textContent = hf;
+  document.getElementById('hfValue').textContent = hf;
+  const hfEl = document.getElementById('hfDisplay');
+  const barEl = document.getElementById('hfBar');
+  const pct = Math.min((val / 300) * 100, 100);
+  barEl.style.width = pct + '%';
+  if (val >= 200) {
+    hfEl.className = 'health-number health-good';
+    barEl.className = 'progress-fill progress-health-good';
+  } else if (val >= 120) {
+    hfEl.className = 'health-number health-warn';
+    barEl.className = 'progress-fill progress-health-warn';
+  } else {
+    hfEl.className = 'health-number health-bad';
+    barEl.className = 'progress-fill progress-health-bad';
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  DAO DATA & RENDERING
+// ═══════════════════════════════════════════════
+const proposals = [
+  {
+    id: 'NXS-042', daoId: 1, daoName: '⚡ Nexus Core',
+    title: 'Upgrade Lending Protocol to V2 with Dynamic APY Model',
+    desc: 'This proposal upgrades the NexusLending contract to V2, implementing a kinked interest rate model for more efficient capital allocation and better borrower incentives during high-utilization periods.',
+    forPct: 72, againstPct: 18, abstainPct: 10,
+    forVotes: '2.4M NXS', totalVoters: 184,
+    endsIn: '2d 14h', status: 'Active', quorum: '68%'
+  },
+  {
+    id: 'NXS-041', daoId: 1, daoName: '⚡ Nexus Core',
+    title: 'Allocate 0.5 BTC Treasury to LP Incentives',
+    desc: 'Proposal to allocate 0.5 BTC from the Nexus Core treasury to incentivize WBTC/sBTC liquidity providers on the Nexus DEX for Q4.',
+    forPct: 88, againstPct: 8, abstainPct: 4,
+    forVotes: '4.1M NXS', totalVoters: 327,
+    endsIn: '18h 22m', status: 'Active', quorum: '94%'
+  },
+  {
+    id: 'WVP-007', daoId: 2, daoName: '🌊 Wave Protocol',
+    title: 'Reduce Protocol Fee from 2.5% to 2.0% on NFT Sales',
+    desc: 'Lower the marketplace fee to increase trading volume and make Nexus NFT Market more competitive vs. other platforms.',
+    forPct: 61, againstPct: 32, abstainPct: 7,
+    forVotes: '890K WVE', totalVoters: 92,
+    endsIn: '4d 8h', status: 'Active', quorum: '43%'
+  },
+];
+
+const daos = [
+  { id: 1, emoji: '⚡', name: 'Nexus Core', members: '2,841 members', treasury: '3.42 BTC', yourRole: 'Member' },
+  { id: 2, emoji: '🌊', name: 'Wave Protocol', members: '918 members', treasury: '0.88 BTC', yourRole: 'Delegate' },
+  { id: 3, emoji: '🔮', name: 'Cipher Guild', members: '445 members', treasury: '0.52 BTC', yourRole: 'Admin' },
+];
+
+function renderProposals() {
+  document.getElementById('proposalsList').innerHTML = proposals.map(p => `
+    <div class="proposal-card">
+      <div class="proposal-header">
+        <div style="flex:1;">
+          <div class="proposal-id">${p.daoName} · #${p.id}</div>
+          <div class="proposal-title">${p.title}</div>
+        </div>
+        <span class="badge ${p.status === 'Active' ? 'badge-green' : 'badge-blue'}">${p.status}</span>
+      </div>
+      <p class="proposal-desc">${p.desc}</p>
+      <div class="vote-bars">
+        <div class="vote-row">
+          <span class="vote-label text-sm text-green">For</span>
+          <div class="progress-bar" style="flex:1;">
+            <div class="progress-fill progress-for" style="width:${p.forPct}%"></div>
+          </div>
+          <span class="vote-pct">${p.forPct}%</span>
+        </div>
+        <div class="vote-row">
+          <span class="vote-label text-sm text-red">Against</span>
+          <div class="progress-bar" style="flex:1;">
+            <div class="progress-fill progress-against" style="width:${p.againstPct}%"></div>
+          </div>
+          <span class="vote-pct">${p.againstPct}%</span>
+        </div>
+        <div class="vote-row">
+          <span class="vote-label text-sm text-muted">Abstain</span>
+          <div class="progress-bar" style="flex:1;">
+            <div class="progress-fill" style="width:${p.abstainPct}%;background:rgba(136,146,164,0.4);"></div>
+          </div>
+          <span class="vote-pct">${p.abstainPct}%</span>
+        </div>
+      </div>
+      <div class="proposal-footer">
+        <div class="proposal-meta">
+          <span>⏳ Ends in ${p.endsIn}</span>
+          <span>👥 ${p.totalVoters} voters</span>
+          <span>📊 Quorum: ${p.quorum}</span>
+        </div>
+        <div class="vote-actions">
+          <button class="btn btn-success btn-sm" onclick="castVote('${p.id}', 'for')">✓ Vote For</button>
+          <button class="btn btn-danger btn-sm" onclick="castVote('${p.id}', 'against')">✗ Against</button>
+          <button class="btn btn-outline btn-sm" onclick="castVote('${p.id}', 'abstain')">— Abstain</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderDAOs() {
+  document.getElementById('daoList').innerHTML = daos.map(d => `
+    <div class="dao-list-item">
+      <div class="dao-avatar" style="background:rgba(56,189,248,0.08);">${d.emoji}</div>
+      <div style="flex:1;">
+        <div class="dao-name">${d.name}</div>
+        <div class="dao-members">${d.members} · Treasury: ${d.treasury}</div>
+      </div>
+      <span class="badge ${d.yourRole === 'Admin' ? 'badge-gold' : d.yourRole === 'Delegate' ? 'badge-purple' : 'badge-blue'}">${d.yourRole}</span>
+    </div>
+  `).join('');
+}
+
+function castVote(proposalId, support) {
+  if (!state.walletConnected) {
+    showToast('error', 'Wallet Required', 'Connect your OP_WALLET to cast votes.');
+    return;
+  }
+  showToast('info', 'Submitting Vote…', `Signing on-chain vote for Proposal #${proposalId}…`);
+  setTimeout(() => {
+    const labels = { for: '✅ Voted For', against: '❌ Voted Against', abstain: '⬜ Abstained' };
+    showToast('success', labels[support], `Your vote on Proposal #${proposalId} has been recorded on Bitcoin L1.`);
+  }, 1800);
+}
+
+// ═══════════════════════════════════════════════
+//  MODAL HELPERS
+// ═══════════════════════════════════════════════
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function openListModal() { openModal('listModal'); }
+function openFlashLoanModal() { openModal('flashModal'); }
+function openCreateDAOModal() { openModal('createDaoModal'); }
+function openCreateProposalModal() { openModal('createProposalModal'); }
+function openTreasuryModal() { openModal('treasuryModal'); }
+
+// Close on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
+});
+
+function submitListing() {
+  const tokenId = document.getElementById('listTokenId')?.value;
+  const price = document.getElementById('listPrice')?.value;
+  if (!tokenId || !price || parseFloat(price) <= 0) {
+    showToast('error', 'Invalid Input', 'Please fill in all fields with valid values.');
+    return;
+  }
+  if (!state.walletConnected) {
+    showToast('error', 'Wallet Required', 'Connect your OP_WALLET first.');
+    return;
+  }
+  closeModal('listModal');
+  showToast('info', 'Listing NFT…', `Transferring Token #${tokenId} to marketplace escrow…`);
+  setTimeout(() => {
+    showToast('success', 'NFT Listed! 🎉', `Token #${tokenId} is now listed for ₿${price}. Buyers can find it in the marketplace.`);
+  }, 2000);
+}
+
+function submitCreateDAO() {
+  const name = document.getElementById('daoName')?.value;
+  const token = document.getElementById('daoToken')?.value;
+  if (!name || !token) {
+    showToast('error', 'Missing Fields', 'DAO name and governance token address are required.');
+    return;
+  }
+  if (!state.walletConnected) {
+    showToast('error', 'Wallet Required', 'Connect your OP_WALLET to deploy a DAO.');
+    return;
+  }
+  closeModal('createDaoModal');
+  showToast('info', 'Deploying DAO…', `Creating ${name} on Bitcoin L1…`);
+  setTimeout(() => {
+    showToast('success', 'DAO Created! 🏛', `${name} has been deployed. Share it with your community to start governance.`);
+  }, 2400);
+}
+
+function submitProposal() {
+  const title = document.getElementById('propTitle')?.value;
+  const desc = document.getElementById('propDesc')?.value;
+  if (!title || !desc) {
+    showToast('error', 'Missing Fields', 'Title and description are required for a proposal.');
+    return;
+  }
+  if (!state.walletConnected) {
+    showToast('error', 'Wallet Required', 'Connect your OP_WALLET to submit proposals.');
+    return;
+  }
+  closeModal('createProposalModal');
+  showToast('info', 'Submitting Proposal…', 'Encoding proposal calldata for Bitcoin L1…');
+  setTimeout(() => {
+    showToast('success', 'Proposal Submitted! 📋', `"${title}" is now live for community voting. Voting ends in ~7 days.`);
+  }, 2000);
+}
+
+function submitTreasuryDeposit() {
+  closeModal('treasuryModal');
+  if (!state.walletConnected) {
+    showToast('error', 'Wallet Required', 'Connect your OP_WALLET first.');
+    return;
+  }
+  showToast('success', 'Treasury Deposit Sent! 🏦', 'Your BTC contribution has been recorded in the DAO treasury.');
+}
+
+function calcFlashFee() {
+  const amt = parseFloat(document.getElementById('flashAmount')?.value || 0);
+  const displayEl = document.getElementById('flashFeeDisplay');
+  if (amt > 0) {
+    const fee = (amt * 0.0009).toFixed(6);
+    const repay = (amt + parseFloat(fee)).toFixed(6);
+    document.getElementById('flashAmtDisplay').textContent = amt.toFixed(4);
+    document.getElementById('flashFeeCalc').textContent = fee;
+    document.getElementById('flashRepayTotal').textContent = repay;
+    displayEl.style.display = 'block';
+  } else {
+    displayEl.style.display = 'none';
+  }
+}
+
+function executeFlashLoan() {
+  const amt = document.getElementById('flashAmount')?.value;
+  if (!amt || parseFloat(amt) <= 0) {
+    showToast('error', 'Invalid Amount', 'Enter a valid flash loan amount.');
+    return;
+  }
+  if (!state.walletConnected) {
+    showToast('error', 'Wallet Required', 'Connect your OP_WALLET first.');
+    return;
+  }
+  closeModal('flashModal');
+  showToast('info', 'Executing Flash Loan…', `Atomic transaction: borrow ${amt} → execute → repay in same block…`);
+  setTimeout(() => {
+    showToast('success', '⚡ Flash Loan Complete!', `${amt} borrowed and repaid atomically. Fee paid: ${(parseFloat(amt)*0.0009).toFixed(6)}.`);
+  }, 1600);
+}
+
+// ═══════════════════════════════════════════════
+//  TOAST SYSTEM
+// ═══════════════════════════════════════════════
+function showToast(type, title, message) {
+  const container = document.getElementById('toastContainer');
+  const icons = { success: '✅', error: '❌', info: '💫', warning: '⚠️' };
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.innerHTML = `
+    <span class="toast-icon">${icons[type] || '💫'}</span>
+    <div class="toast-body">
+      <div class="toast-title">${title}</div>
+      <div class="toast-message">${message}</div>
+    </div>
+    <span style="cursor:pointer;color:var(--text-muted);font-size:0.9rem;margin-left:8px;" onclick="this.parentElement.remove()">✕</span>
+  `;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.classList.add('leaving');
+    setTimeout(() => toast.remove(), 300);
+  }, 4500);
+}
+
+// ═══════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  showPage('marketplace');
+  renderNFTs();
+  renderLendingTables();
+  renderProposals();
+  renderDAOs();
+
+  // Welcome toast
+  setTimeout(() => {
+    showToast('info', 'Welcome to Nexus Protocol', 'Bitcoin L1 DeFi is here. Connect your wallet to begin.');
+  }, 800);
+});
+</script>
+</body>
+</html>
